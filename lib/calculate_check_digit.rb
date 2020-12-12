@@ -12,13 +12,10 @@ class CalculateCheckDigit
   end
 
   def [](vin)
-    sum = 0
-    map = [*(0..10), 'X']
-    weights = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]
-
-    vin.chars.each_with_index do |char, i|
-      sum += transliterate(char) * weights[i]
+    sum = vin.chars.each_with_index.reduce(0) do |acc, (char, i)|
+      acc + transliterate(char) * weights[i]
     end
+
     map[sum % 11]
   end
 
@@ -26,6 +23,14 @@ class CalculateCheckDigit
 
   def transliterate(char)
     '0123456789.ABCDEFGH..JKLMN.P.R..STUVWXYZ'.index(char) % 10
+  end
+
+  def map
+    [*(0..10), 'X']
+  end
+
+  def weights
+    [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]
   end
 end
 
