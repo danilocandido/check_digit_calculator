@@ -12,11 +12,11 @@ class CalculateCheckDigit
   end
 
   def [](vin)
-    sum = vin.chars.each_with_index.reduce(0) do |acc, (char, i)|
-      acc + transliterate(char) * weights[i]
-    end
-
-    map[sum % 11]
+    vin
+      .chars
+      .each_with_index
+      .reduce(0) { |acc, (char, i)| acc + transliterate(char) * weights[i] }
+      .yield_self { |sum| map[sum % 11] }
   end
 
   private
@@ -26,7 +26,7 @@ class CalculateCheckDigit
   end
 
   def map
-    [*(0..10), 'X']
+    [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 'X']
   end
 
   def weights
