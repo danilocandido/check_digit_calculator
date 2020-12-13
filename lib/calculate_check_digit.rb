@@ -17,6 +17,14 @@ class CalculateCheckDigit
     ) % response
   end
 
+  private
+
+  attr_reader :vin
+
+  def initialize(vin)
+    @vin = vin.strip
+  end
+
   def response
     {
       vin: vin,
@@ -24,14 +32,6 @@ class CalculateCheckDigit
       message: message,
       check_digit: check_digit
     }
-  end
-
-  private
-
-  attr_reader :vin
-
-  def initialize(vin)
-    @vin = vin.strip
   end
 
   def check_digit
