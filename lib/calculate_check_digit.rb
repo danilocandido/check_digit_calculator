@@ -5,15 +5,11 @@ class CalculateCheckDigit
   MAP_DIGITS = %w[0 1 2 3 4 5 6 7 9 10 X].freeze
   CHECK_DIGIT_INDEX = 8
 
-  attr_reader :vin
-
   def self.[](vin)
     new(String(vin)).response
   end
 
   def response
-    return unless vin
-
     <<~TXT
       Provided VIN: #{vin}
       Check Digit: #{result}
@@ -23,6 +19,7 @@ class CalculateCheckDigit
 
   private
 
+  attr_reader :vin
 
   def initialize(vin)
     @vin = vin.strip
@@ -44,7 +41,7 @@ class CalculateCheckDigit
     '0123456789.ABCDEFGH..JKLMN.P.R..STUVWXYZ'.index(char) % 10
   end
 
-  def valid_check_digit?
+  def valid?
     vin[CHECK_DIGIT_INDEX] == check_digit
   end
 
@@ -55,7 +52,7 @@ class CalculateCheckDigit
   end
 
   def result
-    valid_check_digit? ? :VALID : :INVALID
+    valid? ? :VALID : :INVALID
   end
 
   def message
