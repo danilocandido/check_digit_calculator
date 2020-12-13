@@ -12,7 +12,7 @@ class CalculateCheckDigit
   def display
     %(
       Provided VIN: %<vin>s
-      Check Digit: %<check_digit>s
+      Check Digit: %<result>s
       %<message>s
     ) % response
   end
@@ -20,8 +20,9 @@ class CalculateCheckDigit
   def response
     {
       vin: vin,
-      check_digit: result,
-      message: message
+      result: result,
+      message: message,
+      check_digit: check_digit
     }
   end
 

@@ -10,7 +10,7 @@ describe CalculateCheckDigit do
       let(:vin) { '2NKWL00X16M149834' }
 
       it { should include('Check Digit: VALID') }
-      it { should include('This looks like a VALID vin!') }
+      it { should include('This looks like a VALID vin! 1') }
 
       context 'check digit X' do
         let(:vin) { '1M8GDM9AXKP042788' }
