@@ -6,15 +6,23 @@ class CalculateCheckDigit
   CHECK_DIGIT_INDEX = 8
 
   def self.[](vin)
-    new(String(vin)).response
+    new(String(vin)).display
+  end
+
+  def display
+    %(
+      Provided VIN: %<vin>s
+      Check Digit: %<check_digit>s
+      %<message>s
+    ) % response
   end
 
   def response
-    <<~TXT
-      Provided VIN: #{vin}
-      Check Digit: #{result}
-      #{message}
-    TXT
+    {
+      vin: vin,
+      check_digit: result,
+      message: message
+    }
   end
 
   private
@@ -57,12 +65,12 @@ class CalculateCheckDigit
 
   def message
     case result
-    when :VALID then 'This looks like a VALID vin!'
+    when :VALID then "This looks like a VALID vin! #{check_digit}"
     when :INVALID
-      <<~TXT
+      %(
         Suggested VIN(s):
           - Check digit #{vin[CHECK_DIGIT_INDEX]} is incorrect, correct value is #{check_digit}
-      TXT
+      )
     end
   end
 
