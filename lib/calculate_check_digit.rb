@@ -2,19 +2,17 @@
 
 # !/usr/bin/env ruby
 
-require 'pry'
-
-vin = ARGV[0]
-
 class CalculateCheckDigit
+  CHECK_DIGIT_INDEX = 8
+
   def self.[](vin)
-    new(vin).response
+    new(String(vin)).response
   end
 
   def response
     <<~TXT
       Provided VIN: #{vin}
-      Check Digit: #{check_digit} #{result}
+      Check Digit: #{result}
       #{message}
     TXT
   end
@@ -42,24 +40,30 @@ class CalculateCheckDigit
   end
 
   def map
-    [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 'X']
+    %w[0 1 2 3 4 5 6 7 9 10 X]
   end
 
   def weights
     [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]
   end
 
-  def message
-    {
-      VALID: 'This looks like a VALID vin!',
-      INVALID: 'Suggested VIN(s):'
-    }[result]
+  def valid_check_digit?
+    vin[CHECK_DIGIT_INDEX] == check_digit
   end
 
   def result
-    check_digit ? :VALID : :INVALID
+    valid_check_digit? ? :VALID : :INVALID
+  end
+
+  def message
+    case result
+    when :VALID
+      'This looks like a VALID vin!'
+    when :INVALID
+      <<~TXT
+        Suggested VIN(s):
+          - Check digit #{vin[CHECK_DIGIT_INDEX]} is incorrect, correct value is #{check_digit}
+      TXT
+    end
   end
 end
-
-chk_digit = CalculateCheckDigit[vin]
-puts chk_digit
